@@ -9,22 +9,17 @@ monitorHeight = get_monitors()[0].height
 monitorWidth = get_monitors()[0].width
 serverAddress = 0
 serverPort = 0
+pxAmount = 0
 
-# TEMPORARY
-pxAmount = {
-    'vertical': 10,
-    'horizontal': 16
-}
-
-pixelAverageHeight = int(monitorHeight / pxAmount['vertical'])
-pixelAverageWidth = int(monitorWidth / pxAmount['horizontal'])
-# END OF TEMPORARY
-
-# Get server IP and port
+# Get configuration from file
 with open("config.json") as configFile:
     jsonData = json.load(configFile)
     serverAddress = jsonData["serverAddress"]
     serverPort = jsonData["serverPort"]
+    pxAmount = configFile["LEDAmount"]
+
+pixelAverageHeight = int(monitorHeight / pxAmount['vertical'])
+pixelAverageWidth = int(monitorWidth / pxAmount['horizontal'])
 
 # Network setup
 print("Initializing network setup...")
@@ -51,10 +46,13 @@ try:
             print(f"Error: {error}. Continuing.")
             continue
 
+# If received terminate signal, end program casually.
 except KeyboardInterrupt:
     # Close the connection
     clientSocket.close()
     exit()
+
+# If server closes program, close program
 except ConnectionResetError:
     print("Connection closed.")
     clientSocket.close()

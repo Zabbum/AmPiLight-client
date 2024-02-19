@@ -1,4 +1,8 @@
 {
     "serverAddress": "pi.la",
-    "serverPort": 7602
+    "serverPort": 7602,
+    "LEDAmount": {
+        "vertical": 10,
+        "horizontal": 16
+    }
 }
