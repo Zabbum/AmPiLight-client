@@ -1,0 +1,62 @@
+# Import modules
+from helpers import RGBmedians
+import json
+from screeninfo import get_monitors
+import socket, pickle
+
+# Global variables
+monitorHeight = get_monitors()[0].height
+monitorWidth = get_monitors()[0].width
+serverAddress = 0
+serverPort = 0
+
+# TEMPORARY
+pxAmount = {
+    'vertical': 10,
+    'horizontal': 16
+}
+
+pixelAverageHeight = int(monitorHeight / pxAmount['vertical'])
+pixelAverageWidth = int(monitorWidth / pxAmount['horizontal'])
+# END OF TEMPORARY
+
+# Get server IP and port
+with open("config.json") as configFile:
+    jsonData = json.load(configFile)
+    serverAddress = jsonData["serverAddress"]
+    serverPort = jsonData["serverPort"]
+
+# Network setup
+print("Initializing network setup...")
+clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+try:
+    clientSocket.connect((serverAddress, serverPort))
+except ConnectionRefusedError:
+    print("Connection refused.")
+    exit(1)
+
+# Program loop
+try:
+    while True:
+        try:
+            print("Program started!")
+
+            RGBdata = RGBmedians( # Get the RGB data
+                pxAmount['horizontal'], pxAmount['vertical'],
+                pixelAverageWidth, pixelAverageHeight
+            )
+            print(RGBdata) # Log the data
+            serializedData = pickle.dumps(RGBdata) # Serialize data
+            clientSocket.sendall(serializedData) # Send data
+        except BrokenPipeError as error:
+            print(f"Error: {error}. Continuing.")
+            continue
+
+except KeyboardInterrupt:
+    # Close the connection
+    clientSocket.close()
+    exit()
+except ConnectionResetError:
+    print("Connection closed.")
+    clientSocket.close()
+    exit(1)
