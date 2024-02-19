@@ -9,14 +9,14 @@ monitorHeight = get_monitors()[0].height
 monitorWidth = get_monitors()[0].width
 serverAddress = 0
 serverPort = 0
-pxAmount = 0
+pxAmount = {}
 
 # Get configuration from file
 with open("config.json") as configFile:
     jsonData = json.load(configFile)
     serverAddress = jsonData["serverAddress"]
     serverPort = jsonData["serverPort"]
-    pxAmount = configFile["LEDAmount"]
+    pxAmount = jsonData["LEDAmount"]
 
 pixelAverageHeight = int(monitorHeight / pxAmount['vertical'])
 pixelAverageWidth = int(monitorWidth / pxAmount['horizontal'])
