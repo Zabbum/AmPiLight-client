@@ -36,11 +36,10 @@ except ConnectionRefusedError:
     exit(1)
 
 # Program loop
+print("Connected!")
 try:
     while True:
         try:
-            print("Program started!")
-
             RGBdata = RGBmedians( # Get the RGB data
                 pxAmount['horizontal'], pxAmount['vertical'],
                 pixelAverageWidth, pixelAverageHeight
