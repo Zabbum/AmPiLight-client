@@ -39,7 +39,7 @@ try:
                 pxAmount['horizontal'], pxAmount['vertical'],
                 pixelAverageWidth, pixelAverageHeight
             )
-            print(RGBdata) # Log the data
+            print(f"Sent data: {RGBdata}\n") # Log the data
             serializedData = pickle.dumps(RGBdata) # Serialize data
             clientSocket.sendall(serializedData) # Send data
         except BrokenPipeError as error:
