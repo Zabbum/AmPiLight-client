@@ -1,7 +1,5 @@
 # Import modules
 from PIL import Image, ImageDraw, ImageGrab, ImageStat
-import numpy as np
-from skimage import io
 
 def RGBmedians(pixelWidth: int, pixelHeight: int, pixelAverageWidth: int, pixelAverageHeight: int):
     screenshot = ImageGrab.grab()       # Screenshot
